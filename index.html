@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Unlock Love 💖</title>
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  font-family: Arial;
+  background: linear-gradient(135deg, #ffe0ec, #fff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+h1 {
+  color: #ff2d6f;
+}
+
+input {
+  padding: 10px;
+  font-size: 18px;
+  border: 2px solid #ff2d6f;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+#yesBtn {
+  margin-top: 20px;
+  padding: 15px 30px;
+  font-size: 20px;
+  background: grey;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: not-allowed;
+}
+
+#noBtn {
+  position: absolute;
+  padding: 12px 20px;
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 10px;
+}
+
+#timer {
+  position: absolute;
+  top: 20px;
+  font-size: 20px;
+  color: #d1004b;
+}
+.heart {
+  position: absolute;
+  color: #ff4d6d;
+  font-size: 20px;
+  animation: floatUp 4s linear forwards;
+  pointer-events: none;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-600px);
+    opacity: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+<audio id="bgMusic" loop>
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
+<h1>💖 Type "YES" to unlock the date 💖</h1>
+
+<div id="timer">Time left: 5</div>
+
+<input id="text" placeholder="Type YES here...">
+<button id="yesBtn" disabled>YES 😍 (Locked)</button>
+<button id="noBtn">NO 😅</button>
+
+<script>
+const input = document.getElementById("text");
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const timer = document.getElementById("timer");
+
+let time = 5;
+
+// countdown
+let countdown = setInterval(() => {
+  time--;
+  timer.innerText = "Time left: " + time;
+
+  if (time <= 0) {
+    clearInterval(countdown);
+    timer.innerText = "Too late 😏 but still try YES";
+  }
+}, 1000);
+
+// unlock YES only if typed YES
+input.addEventListener("input", () => {
+  if (input.value.toUpperCase() === "YES") {
+    yesBtn.disabled = false;
+    yesBtn.style.background = "#4CAF50";
+    yesBtn.style.cursor = "pointer";
+    yesBtn.innerText = "YES 😍 (Unlocked)";
+  }
+});
+
+// YES action
+yesBtn.addEventListener("click", () => {
+  document.body.innerHTML = `
+    <h1>💖 YOU SAID YES!! DATE CONFIRMED 😭💕</h1>
+  `;
+});
+
+// runaway NO
+noBtn.addEventListener("mouseover", move);
+noBtn.addEventListener("click", move);
+
+function move() {
+  const x = Math.random() * (window.innerWidth - 100);
+  const y = Math.random() * (window.innerHeight - 100);
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+}
+// floating hearts generator
+function createHeart() {
+  const heart = document.createElement("div");
+  heart.classList.add("heart");
+  heart.innerText = "💖";
+
+  heart.style.left = Math.random() * window.innerWidth + "px";
+  heart.style.top = window.innerHeight + "px";
+  heart.style.fontSize = (Math.random() * 20 + 10) + "px";
+
+  document.body.appendChild(heart);
+
+  setTimeout(() => {
+    heart.remove();
+  }, 4000);
+}
+
+// keep generating hearts
+setInterval(createHeart, 300);
+const music = document.getElementById("bgMusic");
+
+// play music on first user interaction
+document.body.addEventListener("click", () => {
+  music.play();
+}, { once: true });
+</script>
+</body>
+</html>
